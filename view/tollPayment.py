@@ -27,7 +27,7 @@ class TollPaymentView:
 
         plate_frame = tk.Frame(popup)
         plate_frame.pack(anchor='w', expand=True)
-        tk.Label(plate_frame, text="transaction Plate", width=15, bg='light blue').pack(side='left')
+        tk.Label(plate_frame, text="Vehicle Plate", width=15, bg='light blue').pack(side='left')
         self.plate_entry = tk.Entry(plate_frame, width=25)
         self.plate_entry.pack(side='left')
 
@@ -48,8 +48,11 @@ class TollPaymentView:
         datetime_frame = tk.Frame(popup)
         datetime_frame.pack(anchor='w', expand=True)
         tk.Label(datetime_frame, text="Date and Time", width=15, bg='light blue').pack(side='left')
-        
+
+        # Geração da data e hora no formato correto
         current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print("Data gerada:", current_datetime)  # Para verificar a saída no console
+
         self.datetime_entry = tk.Entry(datetime_frame, width=25)
         self.datetime_entry.insert(0, current_datetime)
         self.datetime_entry.pack(side='left')
@@ -64,7 +67,10 @@ class TollPaymentView:
         payment_frame = tk.Frame(popup)
         payment_frame.pack(anchor='w', expand=True)
         tk.Label(payment_frame, text="Payment Method", width=15, bg='light blue').pack(side='left')
-        self.payment_entry = tk.Entry(payment_frame, width=25)
+        # Criação do dropdown para os métodos de pagamento
+        self.payment_entry = ttk.Combobox(payment_frame, width=25)
+        self.payment_entry['values'] = ('Money', 'Debit Card', 'Credit Card', 'Pix')  # Adiciona as opções
+        self.payment_entry.set('Select Payment Method')  # Define um texto padrão
         self.payment_entry.pack(side='left')
 
         button_frame = tk.Frame(popup)
@@ -83,16 +89,16 @@ class TollPaymentView:
         amount = self.amount_entry.get()
         payment_method = self.payment_entry.get()
 
-        transaction = MainControl.find_vehicle(plate)
+        vehicle = MainControl.find_vehicle(plate)
         operator = MainControl.find_tollOperator(operator_email)
         tollbooth = MainControl.find_tollBooth(tollbooth_id)
 
-        if transaction and operator and tollbooth:
-            new_transaction = TollPayment(transactionid, transaction, tollbooth, operator, amount, payment_method, datetime)
+        if vehicle and operator and tollbooth:
+            new_transaction = TollPayment(transactionid, vehicle, tollbooth, operator, amount, payment_method, datetime)
             MainControl.add_transaction(new_transaction)
             self.popup.destroy()
         else:
-            error_label = tk.Label(self.popup, text="Invalid data. Please check your inputs.", fg='red', bg='light blue')
+            error_label = tk.Label(self.popup, text="Invalid vehicle, operator or toll booth. Please check your inputs.", fg='red', bg='light blue')
             error_label.pack()
     
     def list_transactions(self):
@@ -131,9 +137,9 @@ class TollPaymentView:
 
         self.search_label = Label(self.root)
         self.search_label.grid(row=1, column=7, padx=7, sticky='s', columnspan=2)  
-        email_label = Label(self.search_label, text="Operator Email").grid(row=0, column=0)
-        self.email_entry = Entry(self.search_label, width=25)  # Ajustando a largura
-        self.email_entry.grid(row=1, column=0)
+        email_label = Label(self.search_label, text="Payment ID").grid(row=0, column=0)
+        self.transactionid_entry = Entry(self.search_label, width=25)  # Ajustando a largura
+        self.transactionid_entry.grid(row=1, column=0)
 
         button_search = Button(self.root, text="Search", command=self.find_transaction_by_id)
         button_search.grid(row=2, column=7, padx=5)  
@@ -172,7 +178,7 @@ class TollPaymentView:
         for item in self.tree.get_children():
             self.tree.delete(item)
         for i, transaction in enumerate(transactions):
-            self.tree.insert(parent="", index=tk.END, iid=i, text="", values=(transaction.transactionid, transaction.vehicle, transaction.tollbooth, transaction.operator, transaction.amount, transaction.method, transaction.date))
+            self.tree.insert(parent="", index=tk.END, iid=i, text="", values=(transaction.transactionid, transaction.vehicle.plate, transaction.operator.email, transaction.amount, transaction.date, transaction.method))
     
     def find_transaction_by_id(self):
         # Get the ID from the entry box
@@ -181,28 +187,10 @@ class TollPaymentView:
         # Find the transaction by ID, it might return None if the transaction is not found
         transaction = MainControl.find_transaction_by_id(transaction_id)
 
-        # Remove all the items from the tree
+        # remove all the items from the tree
         for item in self.tree.get_children():
             self.tree.delete(item)
+        # insert the new tollOperators
+        self.tree.insert(parent="", index=tk.END, text="", values=(transaction.transactionid, transaction.vehicle.plate, transaction.operator.email, transaction.amount, transaction.date, transaction.method))
 
-        # Insert the found transaction, if any
-        if transaction:
-            self.tree.insert(
-                parent="",
-                index=tk.END,
-                iid=0,
-                text="",
-                values=(transaction.vehicle.plate, transaction.operator.email, transaction.tollbooth.boothid)
-            )
-        else:
-            # If no transaction is found, display a message
-            error_label = tk.Label(self.root, text="Transaction not found.", fg='red')
-            error_label.grid(row=3, column=7, padx=10)
-
-
-    def remove_transaction(self):
-        selected_item = self.tree.selection()[0]
-        transaction = MainControl.find_transaction_by_details(self.tree.item(selected_item)['values'])
-        #MainControl.remove_tollPayment(transaction)
-        self.tree.delete(selected_item)
 

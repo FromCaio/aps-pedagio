@@ -114,6 +114,7 @@ class MainControl:
     def find_transaction_by_id(cls, transaction_id):
         return cls.data_manager.find_tollPayment(transaction_id)
     
+    @classmethod
     def remove_tollPayment(cls, transaction):
         cls.data_manager.delete_tollPayment(transaction)
     
