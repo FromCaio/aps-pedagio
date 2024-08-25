@@ -127,20 +127,18 @@ class TollPaymentView:
                 transaction.method))  # Método de pagamento
 
         tree.pack()
-        table_label.grid(row=1, column=1, rowspan=4, columnspan=4, padx=10, pady=10)
+        table_label.grid(row=1, column=1, rowspan=4, columnspan=4, padx=3, pady=10)
 
         self.search_label = Label(self.root)
-        self.search_label.grid(row=1, column=7, padx=10, sticky='s', columnspan=2)
-        email_label = Label(self.search_label, text="Operator Email").grid(row=0, column=0)  # Alterado para "Operator Email"
-        self.email_entry = Entry(self.search_label, width=30)
+        self.search_label.grid(row=1, column=7, padx=7, sticky='s', columnspan=2)  
+        email_label = Label(self.search_label, text="Operator Email").grid(row=0, column=0)
+        self.email_entry = Entry(self.search_label, width=25)  # Ajustando a largura
         self.email_entry.grid(row=1, column=0)
 
-        empty_label = Label(self.root, width=30, bg='light blue')
-        empty_label.grid(row=1, column=6)
-        button_search = Button(self.root, text="Search", command=self.find_transaction_by_id)  # Alterado para buscar por email do operador
-        button_search.grid(row=2, column=7, padx=10)
+        button_search = Button(self.root, text="Search", command=self.find_transaction_by_id)
+        button_search.grid(row=2, column=7, padx=5)  
         button_refresh = Button(self.root, text="Refresh", command=self.refresh_table)
-        button_refresh.grid(row=2, column=8, padx=10)
+        button_refresh.grid(row=2, column=8, padx=5)  
 
         remove_label = Label(self.root, bg='light blue')
         button_remove_one = Button(remove_label, text="Remove One", command=self.remove_one)
@@ -150,9 +148,6 @@ class TollPaymentView:
         remove_label.grid(row=6, column=2, padx=10)
         self.tree = tree
 
-
-
- 
     def remove_one(self):
         # get the selected item
         selected_item = self.tree.selection()[0]
