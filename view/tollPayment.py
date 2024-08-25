@@ -58,6 +58,7 @@ class TollPaymentView:
         tk.Label(amount_frame, text="Amount Paid", width=15, bg='light blue').pack(side='left')
         self.amount_entry = tk.Entry(amount_frame, width=25)
         self.amount_entry.pack(side='left')
+        self.amount_entry.insert(0, 6.45)  # Pré-insere o valor do pedagio
 
         payment_frame = tk.Frame(popup)
         payment_frame.pack(anchor='w', expand=True)
