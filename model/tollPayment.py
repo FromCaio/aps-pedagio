@@ -1,10 +1,11 @@
 from tollBooth import TollBooth
 from vehicle import Vehicle
 from tollOperator import TollOperator
+import json
 
 class TollPayment:
-    def __init__(self, transactionid, vehicle: Vehicle, tollbooth:TollBooth, operator:TollOperator, amount, method, date):
-        self.transactionid = transactionid
+    def __init__(self, vehicle:Vehicle, tollbooth:TollBooth, operator:TollOperator, amount, method, date):
+        self.transactionid = self.get_transaction_id()
         self.vehicle = vehicle
         self.tollboth = tollbooth
         self.operator = operator
@@ -13,10 +14,10 @@ class TollPayment:
         self.date = date
 
     def __str__(self):
-        return (f"Transaction ID: {self.transactionid}, Vehicle: {self.vehicle}, "
-                f"TollBooth: {self.tollbooth}, Operator: {self.operator}, "
-                f"Amount: {self.amount}, Method: {self.method}, Date: {self.date}")
-
+        return (f"Vehicle: {self.vehicle}, TollBooth: {self.tollbooth},"
+                f"Operator: {self.operator}, Amount: {self.amount},"
+                f"Method: {self.method}, Date: {self.date}")
+   
     def to_dict(self):
         return {
             'transactionid': self.transactionid,
@@ -27,6 +28,14 @@ class TollPayment:
             'method': self.method,
             'date': self.date
         }
+    # methods to get tollPayment class attribute ID value
+    def get_transaction_id(self):
+        with open('data/json_files/transactionid_id.json', 'r') as f:
+            transaction_id = json.load(f)
+        transaction_id += 1
+        with open('data/json_files/transaction_id.json', 'w') as f:
+            json.dump(transaction_id, f)
+        return transaction_id
     
     @classmethod
     def from_dict(cls, data):
