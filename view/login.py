@@ -54,7 +54,7 @@ class LoginView:
             admin.create_widgets()
         # check if user is of type tollOperator
         elif isinstance(user, TollOperator):
-            toll_operator_view = TollOperatorView(self.root, user)
+            toll_operator_view = TollOperatorView(self.root, user, self.username_entry.get())
             self.clear()
             toll_operator_view.create_widgets()
         else:

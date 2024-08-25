@@ -8,8 +8,9 @@ from tkinter import Button
 from tkinter import ttk
 
 class TollPaymentView:
-    def __init__(self, root):
+    def __init__(self, root, email):
         self.root = root
+        self.emailOperator = email
 
     def add_transaction(self):
         popup = tk.Toplevel(self.root)
@@ -34,6 +35,7 @@ class TollPaymentView:
         tk.Label(operator_frame, text="Operator Email", width=15, bg='light blue').pack(side='left')
         self.operator_entry = tk.Entry(operator_frame, width=25)
         self.operator_entry.pack(side='left')
+        self.operator_entry.insert(0, self.emailOperator)  # Pré-insere o e-mail do operador
 
         tollbooth_frame = tk.Frame(popup)
         tollbooth_frame.pack(anchor='w', expand=True)

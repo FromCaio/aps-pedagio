@@ -14,7 +14,8 @@ from view.tollPayment import TollPaymentView
 
 
 class TollOperatorView:
-    def __init__(self, root, user):
+    def __init__(self, root, user, email):
+        self.emailOperator = email
         self.user = user
         self.root = root
         self.root.title('toll Operator')
@@ -199,11 +200,11 @@ class TollOperatorView:
         # create a vehicle view object if it does not exist
         self.clear()
         if self.tollPayment is None:
-            self.tollPayment = TollPaymentView(self.root)
+            self.tollPayment = TollPaymentView(self.root, self.emailOperator)
         self.tollPayment.list_transactions()
 
     def add_tollPayment(self): 
         self.clear()
         if self.tollPayment is None:
-            self.tollPayment = TollPaymentView(self.root)
+            self.tollPayment = TollPaymentView(self.root, self.emailOperator)
         self.tollPayment.add_transaction()
