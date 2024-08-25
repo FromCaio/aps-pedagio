@@ -23,14 +23,14 @@ class LoginView:
         self.username_label.place(x = 500, y = 250)
         self.username_entry = tk.Entry(self.root)
         self.username_entry.place(x = 600, y = 250)
-        self.username_entry.insert(0, "admin@example.com")
+        self.username_entry.insert(0, "kaka@gmail.com")
 
         # password label and entry
         self.password_label = tk.Label(self.root, text = 'Password', bg = 'light blue')
         self.password_label.place(x = 500, y = 300)
         self.password_entry = tk.Entry(self.root, show = '*')
         self.password_entry.place(x = 600, y = 300)
-        self.password_entry.insert(0, "password")
+        self.password_entry.insert(0, "kaka10")
 
         # login button
         self.login_button = tk.Button(self.root, text = 'Login', bg = 'light grey', command = self.login)

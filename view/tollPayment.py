@@ -2,6 +2,7 @@ import tkinter as tk
 from datetime import datetime
 from control.maincontrol import MainControl
 from model.tollPayment import TollPayment
+from tkinter import Menu
 from tkinter import Label
 from tkinter import Entry
 from tkinter import Button
@@ -26,7 +27,7 @@ class TollPaymentView:
 
         plate_frame = tk.Frame(popup)
         plate_frame.pack(anchor='w', expand=True)
-        tk.Label(plate_frame, text="Vehicle Plate", width=15, bg='light blue').pack(side='left')
+        tk.Label(plate_frame, text="transaction Plate", width=15, bg='light blue').pack(side='left')
         self.plate_entry = tk.Entry(plate_frame, width=25)
         self.plate_entry.pack(side='left')
 
@@ -82,52 +83,102 @@ class TollPaymentView:
         amount = self.amount_entry.get()
         payment_method = self.payment_entry.get()
 
-        vehicle = MainControl.find_vehicle(plate)
+        transaction = MainControl.find_vehicle(plate)
         operator = MainControl.find_tollOperator(operator_email)
         tollbooth = MainControl.find_tollBooth(tollbooth_id)
 
-        if vehicle and operator and tollbooth:
-            new_transaction = TollPayment(transactionid, vehicle, tollbooth, operator, amount, payment_method, datetime)
+        if transaction and operator and tollbooth:
+            new_transaction = TollPayment(transactionid, transaction, tollbooth, operator, amount, payment_method, datetime)
             MainControl.add_transaction(new_transaction)
             self.popup.destroy()
         else:
             error_label = tk.Label(self.popup, text="Invalid data. Please check your inputs.", fg='red', bg='light blue')
             error_label.pack()
-
+    
     def list_transactions(self):
-        transactions = MainControl.get_all_transactions()
+        transactions = MainControl.get_all_transactions()  # Obtendo as transações
         self.root.grid_rowconfigure(0, minsize=100)
         self.root.grid_columnconfigure(0, minsize=100)
         table_label = Label(self.root)
         tree = ttk.Treeview(table_label)
-        tree["columns"] = ("Vehicle Plate", "Operator Email", "Booth ID", "Date and Time", "Amount", "Method")
+        tree["columns"] = ("ID", "Vehicle Plate", "Operator Email", "Amount", "Date", "Method")  # Adicionando os novos atributos
         tree.column("#0", width=0, stretch=tk.NO)
-        tree.column("Vehicle Plate", anchor=tk.W, width=120)
+        tree.column("ID", anchor=tk.CENTER, width=80)
+        tree.column("Vehicle Plate", anchor=tk.CENTER, width=150)
         tree.column("Operator Email", anchor=tk.CENTER, width=200)
-        tree.column("Booth ID", anchor=tk.CENTER, width=100)
-        tree.column("Date and Time", anchor=tk.CENTER, width=150)
         tree.column("Amount", anchor=tk.CENTER, width=100)
-        tree.column("Method", anchor=tk.CENTER, width=150)
+        tree.column("Date", anchor=tk.CENTER, width=150)  # Coluna para Data
+        tree.column("Method", anchor=tk.CENTER, width=100)  # Coluna para Método
         tree.heading("#0", text="", anchor=tk.W)
-        tree.heading("Vehicle Plate", text="Vehicle Plate", anchor=tk.CENTER)
-        tree.heading("Operator Email", text="Operator Email", anchor=tk.CENTER)
-        tree.heading("Booth ID", text="Booth ID", anchor=tk.CENTER)
-        tree.heading("Date and Time", text="Date and Time", anchor=tk.CENTER)
-        tree.heading("Amount", text="Amount", anchor=tk.CENTER)
-        tree.heading("Method", text="Method", anchor=tk.CENTER)
+        tree.heading("ID", text="ID", anchor=tk.CENTER) 
+        tree.heading("Vehicle Plate", text="Vehicle Plate", anchor=tk.CENTER)  # Alterado para "Vehicle Plate"
+        tree.heading("Operator Email", text="Operator Email", anchor=tk.CENTER)  # Alterado para "Operator Email"
+        tree.heading("Amount", text="Amount", anchor=tk.CENTER)  # Alterado para "Amount"
+        tree.heading("Date", text="Date", anchor=tk.CENTER)  # Alterado para "Date"
+        tree.heading("Method", text="Method", anchor=tk.CENTER)  # Alterado para "Method"
+
         for i, transaction in enumerate(transactions):
             tree.insert(parent="", index=tk.END, iid=i, text="", values=(
+                transaction.transactionid,  # ID da transação
                 transaction.vehicle.plate, 
                 transaction.operator.email, 
-                transaction.tollbooth.boothid, 
-                transaction.date,
                 transaction.amount,
-                transaction.method))
+                transaction.date,  # Data da transação
+                transaction.method))  # Método de pagamento
+
         tree.pack()
         table_label.grid(row=1, column=1, rowspan=4, columnspan=4, padx=10, pady=10)
 
+        self.search_label = Label(self.root)
+        self.search_label.grid(row=1, column=7, padx=10, sticky='s', columnspan=2)
+        email_label = Label(self.search_label, text="Operator Email").grid(row=0, column=0)  # Alterado para "Operator Email"
+        self.email_entry = Entry(self.search_label, width=30)
+        self.email_entry.grid(row=1, column=0)
+
+        empty_label = Label(self.root, width=30, bg='light blue')
+        empty_label.grid(row=1, column=6)
+        button_search = Button(self.root, text="Search", command=self.find_transaction_by_id)  # Alterado para buscar por email do operador
+        button_search.grid(row=2, column=7, padx=10)
+        button_refresh = Button(self.root, text="Refresh", command=self.refresh_table)
+        button_refresh.grid(row=2, column=8, padx=10)
+
+        remove_label = Label(self.root, bg='light blue')
+        button_remove_one = Button(remove_label, text="Remove One", command=self.remove_one)
+        button_remove_one.pack(side='left', padx=10)
+        button_remove_many = Button(remove_label, text="Remove Many", command=self.remove_many)
+        button_remove_many.pack(side='left', padx=10)
+        remove_label.grid(row=6, column=2, padx=10)
         self.tree = tree
-   
+
+
+
+ 
+    def remove_one(self):
+        # get the selected item
+        selected_item = self.tree.selection()[0]
+        # get the transaction from the selected item
+        transaction = MainControl.find_transaction_by_id(self.tree.item(selected_item)['values'][0])
+        # remove the transaction
+        MainControl.remove_tollPayment(transaction)
+        # remove the selected item from the tree
+        self.tree.delete(selected_item)
+
+    def remove_many(self):
+        # get the selected items
+        selected_items = self.tree.selection()
+        # remove the transactions
+        for item in selected_items:
+            transaction = MainControl.find_transaction_by_id(self.tree.item(item)['values'][0])
+            MainControl.remove_tollPayment(transaction)
+            self.tree.delete(item) 
+
+    def refresh_table(self):
+        transactions = MainControl.get_all_transactions()
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        for i, transaction in enumerate(transactions):
+            self.tree.insert(parent="", index=tk.END, iid=i, text="", values=(transaction.transactionid, transaction.vehicle, transaction.tollbooth, transaction.operator, transaction.amount, transaction.method, transaction.date))
+    
     def find_transaction_by_id(self):
         # Get the ID from the entry box
         transaction_id = self.transactionid_entry.get()
