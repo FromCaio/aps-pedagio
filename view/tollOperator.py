@@ -10,6 +10,7 @@ from tkinter import Button
 from model.tollOperator import TollOperator
 from control.maincontrol import MainControl
 from view.vehicle import VehicleView
+from view.tollPayment import TollPaymentView
 
 
 class TollOperatorView:
@@ -22,6 +23,7 @@ class TollOperatorView:
         self.tollOperator = None
         self.root.geometry('1280x720')
         self.vehicle = None
+        self.tollPayment = None
 
     def create_widgets(self):
         # we will have a menu bar with the following options
@@ -35,14 +37,15 @@ class TollOperatorView:
         menubar.add_cascade(label="Vehicle", menu=vehiclemenu)
 
         transactionmenu = Menu(menubar, tearoff=0)
-        transactionmenu.add_command(label="Analyse", command=self.donothing)
+        transactionmenu.add_command(label="Add", command=self.add_tollPayment)
+        transactionmenu.add_command(label="List", command=self.list_tollPayment)
         menubar.add_cascade(label="Transaction", menu=transactionmenu)
         menubar.add_command(label="Exit", command=self.close) 
         self.root.config(menu=menubar)
     
     def add_tollOperator(self):
         popup = tk.Toplevel(self.root)
-        popup.title("Add toll Operator")
+        popup.title("Add Toll Operator")
         popup.geometry('300x400')
         popup.configure(bg='light blue')
 
@@ -191,3 +194,16 @@ class TollOperatorView:
         if self.vehicle is None:
             self.vehicle = VehicleView(self.root)
         self.vehicle.add_vehicle()
+
+    def list_tollPayment(self):
+        # create a vehicle view object if it does not exist
+        self.clear()
+        if self.tollPayment is None:
+            self.tollPayment = TollPaymentView(self.root)
+        self.tollPayment.list_transactions()
+
+    def add_tollPayment(self): 
+        self.clear()
+        if self.tollPayment is None:
+            self.tollPayment = TollPaymentView(self.root)
+        self.tollPayment.add_transaction()

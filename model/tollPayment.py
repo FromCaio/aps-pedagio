@@ -1,13 +1,12 @@
-from tollBooth import TollBooth
-from vehicle import Vehicle
-from tollOperator import TollOperator
-import json
+from model.tollBooth import TollBooth
+from model.vehicle import Vehicle
+from model.tollOperator import TollOperator
 
 class TollPayment:
-    def __init__(self, vehicle:Vehicle, tollbooth:TollBooth, operator:TollOperator, amount, method, date):
-        self.transactionid = self.get_transaction_id()
+    def __init__(self, transactionid, vehicle:Vehicle, tollbooth:TollBooth, operator:TollOperator, amount, method, date):
+        self.transactionid = transactionid
         self.vehicle = vehicle
-        self.tollboth = tollbooth
+        self.tollbooth = tollbooth
         self.operator = operator
         self.amount = amount
         self.method = method
@@ -28,14 +27,6 @@ class TollPayment:
             'method': self.method,
             'date': self.date
         }
-    # methods to get tollPayment class attribute ID value
-    def get_transaction_id(self):
-        with open('data/json_files/transactionid_id.json', 'r') as f:
-            transaction_id = json.load(f)
-        transaction_id += 1
-        with open('data/json_files/transaction_id.json', 'w') as f:
-            json.dump(transaction_id, f)
-        return transaction_id
     
     @classmethod
     def from_dict(cls, data):

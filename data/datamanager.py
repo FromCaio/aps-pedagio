@@ -3,6 +3,7 @@ from model.admin import Admin
 from model.vehicle import Vehicle
 from model.tollOperator import TollOperator
 from model.tollBooth import TollBooth
+from model.tollPayment import TollPayment
 
 # this class is responsible for managing the data
 # storing it in a json file, and reading it from the same file
@@ -34,6 +35,11 @@ class DataManager:
                 self.tollBooths = [TollBooth.from_dict(data) for data in json.load(f)]
         except (json.JSONDecodeError, FileNotFoundError):
             self.tollBooths = []
+        try:
+            with open('data/json_files/tollPayments.json', 'r') as f:
+                self.tollPayments = [TollPayment.from_dict(data) for data in json.load(f)]
+        except (json.JSONDecodeError, FileNotFoundError):
+            self.tollPayments = []
     
     # methods for admin
     def insert_admin(self, admin):
@@ -85,6 +91,18 @@ class DataManager:
             if tollBooth.boothid == (str)(boothid):
                 return tollBooth
     
+    #methods toll payment
+    def insert_tollPayment(self, tollPayment):
+        self.tollPayments.append(tollPayment)
+    def delete_tollPayment(self, tollPayment):
+        for payment in self.tollPayments:
+            if payment.transactionid == tollPayment.transactionid:
+                self.tollPayments.remove(payment)
+    def find_tollPayment(self, transactionid):
+        for tollPayment in self.tollPayments:
+            if tollPayment.transactionid == (str)(transactionid):
+                return tollPayment
+
     # method to close the data manager and save the data
     def close(self):
         with open('data/json_files/admins.json', 'w') as f:
@@ -95,3 +113,5 @@ class DataManager:
             json.dump([tollOperator.to_dict() for tollOperator in self.tollOperators], f)
         with open('data/json_files/tollBooths.json', 'w') as f:
             json.dump([tollBooth.to_dict() for tollBooth in self.tollBooths], f)
+        with open('data/json_files/tollPayments.json', 'w') as f:
+            json.dump([tollPayment.to_dict() for tollPayment in self.tollPayments], f)
