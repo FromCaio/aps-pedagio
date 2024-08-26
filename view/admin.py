@@ -216,14 +216,14 @@ class AdminView:
     def add_tollOperator(self):
         self.clear()
         if self.tollOperator is None:
-            self.tollOperator = TollOperatorView(self.root, user = None)
+            self.tollOperator = TollOperatorView(self.root, user = None, email = None)
         self.tollOperator.add_tollOperator()
     
     def list_tollOperator(self):
         # create a toll operator view object if it does not exist
         self.clear()
         if self.tollOperator is None:
-            self.tollOperator = TollOperatorView(self.root, user=None)
+            self.tollOperator = TollOperatorView(self.root, user=None, email = None)
         self.tollOperator.list_tollOperator()
 
     def add_vehicle(self): 
