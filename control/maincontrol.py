@@ -14,15 +14,15 @@ class MainControl:
 
     @classmethod
     def add_admin(cls, admin):
-        cls.adminDAO.insert_admin(admin)
+        cls.adminDAO.insert(admin)
 
     @classmethod
     def remove_admin(cls, admin):
-        cls.adminDAO.delete_admin(admin)
+        cls.adminDAO.delete(admin)
 
     @classmethod
     def find_admin(cls, email):
-        return cls.adminDAO.find_admin(email)
+        return cls.adminDAO.find(email)
     
     @classmethod
     def find_admin_by_name(cls, name):

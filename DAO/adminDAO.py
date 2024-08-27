@@ -1,28 +1,28 @@
 import json
 from model.admin import Admin
+from DAO.DAO import DAO
 
-class AdminDAO:
-    #constructor method
+class AdminDAO(DAO):
     def __init__(self):
-        self.load_admins()
+        super().__init__()
 
     #method to load the data from the json file
-    def load_admins(self):
+    def load(self):
         try:
             with open('DAO/json_files/admins.json', 'r') as f:
                 self.admins = [Admin.from_dict(data) for data in json.load(f)]
         except (json.JSONDecodeError, FileNotFoundError):
             self.admins = []
 
-    def insert_admin(self, admin):
+    def insert(self, admin):
         self.admins.append(admin)
     
-    def delete_admin(self, admin):
+    def delete(self, admin):
         for adm in self.admins:
             if adm.email == admin.email:
                 self.admins.remove(adm)
     
-    def find_admin(self, email):
+    def find(self, email):
         for admin in self.admins:
             if admin.email == email:
                 return admin
