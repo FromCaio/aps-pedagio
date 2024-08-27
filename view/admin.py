@@ -37,8 +37,6 @@ class AdminView:
         adminmenu = Menu(menubar, tearoff=0)
         adminmenu.add_command(label="Add", command=self.add_admin)
         adminmenu.add_command(label="List", command=self.list_admin)
-        adminmenu.add_separator()
-        adminmenu.add_command(label="Exit", command=self.close)
         menubar.add_cascade(label="Admin", menu=adminmenu)
 
         toperatormenu = Menu(menubar, tearoff=0)
@@ -59,7 +57,8 @@ class AdminView:
         tollPaymentmenu = Menu(menubar, tearoff=0)
         tollPaymentmenu.add_command(label="Analyse", command=self.donothing)
         menubar.add_cascade(label="Toll Payment", menu=tollPaymentmenu)
-
+        menubar.add_command(label="Exit", command=self.close) 
+        
         self.root.config(menu=menubar)
     def add_admin(self):
         self.clear()

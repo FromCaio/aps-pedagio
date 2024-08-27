@@ -23,15 +23,15 @@ class Admin:
             'history': self.history
         }
 
-    # methods to get admin class attribute ID value
+    #method to get admin class attribute ID value
     def get_admin_id(self):
-        with open('data/json_files/admin_id.json', 'r') as f:
+        with open('DAO/json_files/admin_id.json', 'r') as f:
             admin_id = json.load(f)
         admin_id += 1
-        with open('data/json_files/admin_id.json', 'w') as f:
+        with open('DAO/json_files/admin_id.json', 'w') as f:
             json.dump(admin_id, f)
         return admin_id
-
+    
     @classmethod
     def from_dict(cls, data):
         admin = cls(data['name'], data['password'], data['email'], data['permission'])
