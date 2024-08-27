@@ -72,6 +72,12 @@ class AdminView:
         popup.geometry('300x400')
         popup.configure(bg='light blue')
 
+        id_frame = tk.Frame(popup)
+        id_frame.pack(anchor='w', expand=True)
+        tk.Label(id_frame, text="Admin ID", width=12, bg='light blue').pack(side='left')
+        self.id_entry = tk.Entry(id_frame, width=25)
+        self.id_entry.pack(side='left')
+        
         name_frame = tk.Frame(popup)
         name_frame.pack(anchor='w', expand=True)
         tk.Label(name_frame, text="Name", width=12, bg='light blue').pack(side='left')
@@ -108,11 +114,12 @@ class AdminView:
 
 
     def submit_admin(self):
+        id = self.id_entry.get()
         name = self.name_entry.get()
         password = self.password_entry.get()
         email = self.email_entry.get()
         permission = int(self.permission_entry.get())
-        new_admin = Admin(name, password, email, permission)
+        new_admin = Admin(id, name, password, email, permission)
         MainControl.add_admin(new_admin)
         self.popup.destroy()
 
