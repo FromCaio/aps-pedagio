@@ -1,28 +1,29 @@
 import json
 from model.tollOperator import TollOperator
+from DAO.DAO import DAO
 
-class TollOperatorDAO:
+class TollOperatorDAO(DAO):
     #constructor method
     def __init__(self):
-        self.load_tollOperators()
+        super().__init__()
 
     #method to load the data from the json file
-    def load_tollOperators(self):
+    def load(self):
         try:
             with open('DAO/json_files/tollOperators.json', 'r') as f:
                 self.tollOperators = [TollOperator.from_dict(data) for data in json.load(f)]
         except (json.JSONDecodeError, FileNotFoundError):
             self.tollOperators = []
 
-    def insert_tollOperator(self, tollOperator):
+    def insert(self, tollOperator):
         self.tollOperators.append(tollOperator)
     
-    def delete_tollOperator(self, tollOperator):
+    def delete(self, tollOperator):
         for toll_op in self.tollOperators:
             if toll_op.email == tollOperator.email:
                 self.tollOperators.remove(toll_op)
     
-    def find_tollOperator(self, email):
+    def find(self, email):
         for toll_op in self.tollOperators:
             if toll_op.email == email:
                 return toll_op

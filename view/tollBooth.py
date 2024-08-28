@@ -92,6 +92,7 @@ class TollBoothView:
         selected_item = self.tree.selection()[0]
         # get the toll both from the selected item
         tollBooth = MainControl.find_tollBooth(self.tree.item(selected_item)['values'][0])
+        print(tollBooth)
         # remove the toll both
         MainControl.remove_tollBooth(tollBooth)
         # remove the selected item from the tree

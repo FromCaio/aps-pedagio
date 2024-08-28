@@ -38,15 +38,15 @@ class MainControl:
 
     @classmethod
     def add_vehicle(cls, vehicle):
-        cls.vehicleDAO.insert_vehicle(vehicle)
+        cls.vehicleDAO.insert(vehicle)
 
     @classmethod
     def remove_vehicle(cls, vehicle):
-        cls.vehicleDAO.delete_vehicle(vehicle)
+        cls.vehicleDAO.delete(vehicle)
 
     @classmethod
     def find_vehicle(cls, plate):
-        return cls.vehicleDAO.find_vehicle(plate)
+        return cls.vehicleDAO.find(plate)
     
     @classmethod
     def get_all_vehicles(cls):
@@ -62,15 +62,15 @@ class MainControl:
     
     @classmethod
     def add_tollBooth(cls, tollBooth):
-        cls.tollBoothDAO.insert_tollBooth(tollBooth)
+        cls.tollBoothDAO.insert(tollBooth)
 
     @classmethod
     def remove_tollBooth(cls, tollBooth):
-        cls.tollBoothDAO.delete_tollBooth(tollBooth)
+        cls.tollBoothDAO.delete(tollBooth)
 
     @classmethod
     def find_tollBooth(cls, boothid):
-        return cls.tollBoothDAO.find_tollBooth(boothid)
+        return cls.tollBoothDAO.find(boothid)
     
     @classmethod
     def get_all_tollBooths(cls):
@@ -97,15 +97,15 @@ class MainControl:
 
     @classmethod
     def add_tollOperator(cls, tollOperator):
-        cls.tollOperatorDAO.insert_tollOperator(tollOperator)
+        cls.tollOperatorDAO.insert(tollOperator)
 
     @classmethod
     def remove_tollOperator(cls, tollOperator):
-        cls.tollOperatorDAO.delete_tollOperator(tollOperator)
+        cls.tollOperatorDAO.delete(tollOperator)
 
     @classmethod
     def find_tollOperator(cls, email):
-        return cls.tollOperatorDAO.find_tollOperator(email)
+        return cls.tollOperatorDAO.find(email)
     
     @classmethod
     def get_all_tollOperators(cls):
@@ -113,7 +113,7 @@ class MainControl:
     
     @classmethod
     def add_transaction(cls, tollPayment):
-        cls.tollPaymentDAO.insert_tollPayment(tollPayment)
+        cls.tollPaymentDAO.insert(tollPayment)
     
     @classmethod
     def get_all_transactions(cls):
@@ -121,11 +121,11 @@ class MainControl:
     
     @classmethod
     def find_transaction_by_id(cls, transaction_id):
-        return cls.tollPaymentDAO.find_tollPayment(transaction_id)
+        return cls.tollPaymentDAO.find(transaction_id)
     
     @classmethod
     def remove_tollPayment(cls, transaction):
-        cls.tollPaymentDAO.delete_tollPayment(transaction)
+        cls.tollPaymentDAO.delete(transaction)
     
     @classmethod
     def close_data_manager(cls):

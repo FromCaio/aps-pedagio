@@ -51,8 +51,6 @@ class TollPaymentView:
 
         # Geração da data e hora no formato correto
         current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print("Data gerada:", current_datetime)  # Para verificar a saída no console
-
         self.datetime_entry = tk.Entry(datetime_frame, width=25)
         self.datetime_entry.insert(0, current_datetime)
         self.datetime_entry.pack(side='left')
@@ -190,7 +188,8 @@ class TollPaymentView:
         # remove all the items from the tree
         for item in self.tree.get_children():
             self.tree.delete(item)
-        # insert the new tollOperators
-        self.tree.insert(parent="", index=tk.END, text="", values=(transaction.transactionid, transaction.vehicle.plate, transaction.operator.email, transaction.amount, transaction.date, transaction.method))
+        # insert the tollPayment
+        if transaction is not None:
+            self.tree.insert(parent="", index=tk.END, text="", values=(transaction.transactionid, transaction.vehicle.plate, transaction.operator.email, transaction.amount, transaction.date, transaction.method))
 
 

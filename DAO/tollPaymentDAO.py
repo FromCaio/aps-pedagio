@@ -1,28 +1,29 @@
 import json
 from model.tollPayment import TollPayment
+from DAO.DAO import DAO
 
-class TollPaymentDAO:   
+class TollPaymentDAO(DAO):   
     #constructor method
     def __init__(self):
-        self.load_tollPayments()
+        super().__init__()
 
     #method to load the data from the json file
-    def load_tollPayments(self):
+    def load(self):
         try:
             with open('DAO/json_files/tollPayments.json', 'r') as f:
                 self.tollPayments = [TollPayment.from_dict(data) for data in json.load(f)]
         except (json.JSONDecodeError, FileNotFoundError):
             self.tollPayments = []
     
-    def insert_tollPayment(self, tollPayment):
+    def insert(self, tollPayment):
         self.tollPayments.append(tollPayment)
     
-    def delete_tollPayment(self, tollPayment):
+    def delete(self, tollPayment):
         for payment in self.tollPayments:
             if payment.transactionid == tollPayment.transactionid:
                 self.tollPayments.remove(payment)
     
-    def find_tollPayment(self, transactionid):
+    def find(self, transactionid):
         for tollPayment in self.tollPayments:
             if tollPayment.transactionid == (str)(transactionid):
                 return tollPayment

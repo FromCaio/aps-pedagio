@@ -148,8 +148,9 @@ class TollOperatorView:
         # remove all the items from the tree
         for item in self.tree.get_children():
             self.tree.delete(item)
-        # insert the new tollOperators
-        self.tree.insert(parent="", index=tk.END, text="", values=(operator.operatorid, operator.name, operator.email, operator.password))
+        if operator is not None:
+            # insert the new tollOperators
+            self.tree.insert(parent="", index=tk.END, text="", values=(operator.operatorid, operator.name, operator.email, operator.password))
     
     def remove_one(self):
         # get the selected item
