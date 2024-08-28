@@ -2,6 +2,15 @@
 from abc import ABC, abstractmethod
 
 class DAO(ABC):
+    #variavel para armazenar as instancias
+    _instance = None
+
+    #metodo Padrao Singleton
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(DAO, cls).__new__(cls)
+        return cls._instance
+    
     #constructor method
     def __init__(self):
         self.load()
