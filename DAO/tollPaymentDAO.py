@@ -27,7 +27,13 @@ class TollPaymentDAO(DAO):
         for tollPayment in self.tollPayments:
             if tollPayment.transactionid == (str)(transactionid):
                 return tollPayment
-    
+
+    def total_amount(self):
+        total = 0
+        for tollPayment in self.tollPayments:
+            total += float(tollPayment.amount)
+        return total
+
     #method to close the connection and save the data to the json file
     def close(self):   
         with open('DAO/json_files/tollPayments.json', 'w') as f:

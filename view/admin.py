@@ -10,6 +10,7 @@ from tkinter import Button
 from view.vehicle import VehicleView
 from view.tollOperator import TollOperatorView
 from view.tollBooth import TollBoothView
+from view.paymentAnalytics import PaymentAnalytics
 from model.admin import Admin
 from control.maincontrol import MainControl
 
@@ -55,7 +56,7 @@ class AdminView:
         menubar.add_cascade(label="Vehicle", menu=vehiclemenu)
 
         tollPaymentmenu = Menu(menubar, tearoff=0)
-        tollPaymentmenu.add_command(label="Analyse", command=self.donothing)
+        tollPaymentmenu.add_command(label="Analyse", command=self.paymentAnalytics)
         menubar.add_cascade(label="Toll Payment", menu=tollPaymentmenu)
         menubar.add_command(label="Exit", command=self.close) 
         
@@ -264,6 +265,11 @@ class AdminView:
             self.tree.delete(item)
         for i, admin in enumerate(admins):
             self.tree.insert(parent="", index=tk.END, iid=i, text="", values=(admin.name, admin.email, admin.permission))
+
+    def paymentAnalytics(self):
+        self.clear()
+        payment_analytics = PaymentAnalytics(self.root)
+        payment_analytics.analytics()
 
     def donothing(self):
         pass

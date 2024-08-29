@@ -126,6 +126,10 @@ class MainControl:
     @classmethod
     def remove_tollPayment(cls, transaction):
         cls.tollPaymentDAO.delete(transaction)
+   
+    @classmethod
+    def get_total_amount(cls):
+       return cls.tollPaymentDAO.total_amount()
     
     @classmethod
     def close_data_manager(cls):
