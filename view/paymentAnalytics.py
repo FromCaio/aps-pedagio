@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 from collections import Counter
-from datetime import datetime
 import matplotlib.pyplot as plt
 from control.maincontrol import MainControl
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -59,19 +58,10 @@ class PaymentAnalytics:
         self.method_graph(frame_payment_methods)
     
     def method_graph(self, frame):
-        # Simulação da função para obter as transações (deve ser adaptada para o seu código real)
-        toll_payments = MainControl.get_all_transactions()  # Obtenha todas as transações
-        # Contar as ocorrências de cada método de pagamento
-        method_counts = Counter()
-        for payment in toll_payments:
-            if payment.method:  # Verifica se o método de pagamento existe
-                method_counts[payment.method] += 1
-        methods = list(method_counts.keys())
-        counts = list(method_counts.values())
+        methods, counts = MainControl.get_payments_by_method()  
         plt.style.use('_mpl-gallery')
-        
         # Criar gráfico de pizza
-        fig, ax = plt.subplots(figsize=(6, 5))  # Ajusta o tamanho do gráfico
+        fig, ax = plt.subplots(figsize=(5, 5))  # Ajusta o tamanho do gráfico
         wedges, texts, autotexts = ax.pie(
             counts,
             labels=methods,
@@ -94,18 +84,9 @@ class PaymentAnalytics:
         canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
     def operator_graph(self, frame):
-        toll_payments = MainControl.get_all_transactions()
-        # Analisar as transações por operador
-        operator_counts = Counter()
-        # Contando as ocorrências de cada operador
-        for payment in toll_payments:
-            if payment.operator and payment.operator.name:  # Verifica se o operador existe e tem nome
-                operator_counts[payment.operator.name] += 1
-
-        operators = list(operator_counts.keys())
-        counts = list(operator_counts.values())
+        operators, counts = MainControl.get_transactions_by_operators()
         plt.style.use('_mpl-gallery')
-        # Gerar dados para o gráfico
+        
         x = np.arange(len(operators))  # Eixo x
         y = counts  # Eixo y com as contagens
         # Criar gráfico de barras com ajuste de tamanho
@@ -127,12 +108,8 @@ class PaymentAnalytics:
         canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
     def hour_graph(self, frame):
-        # Obtendo a lista de pagamentos da camada de controle
-        toll_payments = MainControl.get_all_transactions()
-        # Extraindo as horas das transações
-        hours = [datetime.strptime(payment.date, "%Y-%m-%d %H:%M:%S").hour for payment in toll_payments]
-        # Contabilizando a frequência de cada hora
-        hour_counts = Counter(hours)
+        # Obtendo a o dicionario com a contagem de transações por hora
+        hour_counts = MainControl.get_peak_times()
         # Preparando os dados para o gráfico
         x = np.array(sorted(hour_counts.keys()))  # Horas ordenadas
         y = np.array([hour_counts[hour] for hour in x])  # Frequência das horas
@@ -150,7 +127,7 @@ class PaymentAnalytics:
         ax.set_xticks(x)
         ax.set_xlim(0, 23)
         ax.set_ylim(0, max(y) + 1)
-        # Garantir que os ticks no eixo y sejam inteiros
+        # Garantir que o eixo y seja de inteiros
         ax.yaxis.get_major_locator().set_params(integer=True)
 
         # Integrando o gráfico ao Tkinter
