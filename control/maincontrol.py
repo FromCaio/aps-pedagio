@@ -153,9 +153,7 @@ class MainControl:
             if payment.method:  # Verifica se o método de pagamento existe
                 method_counts[payment.method] += 1
         methods = list(method_counts.keys())
-        print(methods)
         counts = list(method_counts.values())
-        print(counts)
         return methods, counts
 
     #metodo close all data managers 
