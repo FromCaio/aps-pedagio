@@ -39,6 +39,8 @@ class MainControl:
     def get_all(cls, strategy: GetAllStrategy):
         return strategy.get_all()
     
+
+    # metodos find
     @classmethod
     def find_admin(cls, email):
         return cls.adminDAO.find(email)
@@ -49,8 +51,6 @@ class MainControl:
             if admin.name == name:
                 matching_admins.append(admin)
         return matching_admins
-
-    # metodos find
     @classmethod
     def find_vehicle(cls, plate):
         return cls.vehicleDAO.find(plate)
