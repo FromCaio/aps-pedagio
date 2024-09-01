@@ -21,15 +21,15 @@ class DAO(ABC):
         pass
     
     @abstractmethod
-    def insert(self, atribute):
+    def insert(self, attribute):
         pass
     
     @abstractmethod
-    def delete(self, atribute):
+    def delete(self, attribute):
         pass
     
     @abstractmethod
-    def find(self, atribute):
+    def find(self, attribute):
         pass
     
     #method to close the connection and save the data to the json file    
