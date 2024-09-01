@@ -7,7 +7,6 @@ class Admin:
         self.password = password
         self.email = email
         self.permission = permission
-        self.history = []
 
     def __str__(self):
         return f"Admin: {self.name}, Email: {self.email}, Permission: {self.permission}"
@@ -19,7 +18,6 @@ class Admin:
             'password': self.password,
             'email': self.email,
             'permission': self.permission,
-            'history': self.history
         }
 
     @classmethod
