@@ -1,7 +1,8 @@
-import abc
 from collections import Counter
 from datetime import datetime
 from control.analysisStrategy import AnalysisStrategy
+from control.concreteGetAllStrategy import GetAllTransactionsStrategy
+from control.maincontrol import MainControl
 
 
 class OperatorAnalysisStrategy(AnalysisStrategy):
@@ -29,3 +30,12 @@ class PaymentMethodAnalysisStrategy(AnalysisStrategy):
         methods = list(method_counts.keys())
         counts = list(method_counts.values())
         return methods, counts
+
+class GetTotalAmountStrategy(AnalysisStrategy):
+    def analyze(self, toll_payments):
+        get_all_strategy = GetAllTransactionsStrategy()
+        tollPayments = MainControl.get_all(get_all_strategy)
+        total = 0
+        for tollPayment in tollPayments:
+            total += float(tollPayment.amount)
+        return total

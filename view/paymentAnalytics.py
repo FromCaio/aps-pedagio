@@ -5,7 +5,7 @@ from collections import Counter
 import matplotlib.pyplot as plt
 from control.maincontrol import MainControl
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from control.concreteAnalysisStrategy import OperatorAnalysisStrategy, PeakTimesAnalysisStrategy, PaymentMethodAnalysisStrategy
+from control.concreteAnalysisStrategy import OperatorAnalysisStrategy, PeakTimesAnalysisStrategy, PaymentMethodAnalysisStrategy, GetTotalAmountStrategy
 
 class PaymentAnalytics:
     def __init__(self, root):
@@ -39,7 +39,9 @@ class PaymentAnalytics:
         frame_total_value = ttk.Frame(scrollable_frame, padding="10", relief="solid")
         frame_total_value.pack(pady=10)
 
-        total_value = MainControl.get_total_amount()
+        # total_value = MainControl.get_total_amount()
+        get_total_strategy = GetTotalAmountStrategy()
+        total_value = MainControl.analyze_transactions(get_total_strategy)
         label_total_value = ttk.Label(frame_total_value, text=f"Soma de todos os valores pagos: R${total_value:.2f}")
         label_total_value.pack()
 

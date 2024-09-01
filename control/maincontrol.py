@@ -7,7 +7,7 @@ from control.analysisStrategy import AnalysisStrategy
 from control.addStrategy import AddStrategy
 from control.removeStrategy import RemoveStrategy
 from control.getAllStrategy import GetAllStrategy
-from control.concreteGetAllStrategy import GetAllAdminStrategy, GetAllVehicleStrategy, GetAllTollBoothStrategy, GetAllTollOperatorStrategy, GetAllTransactionsStrategy
+from control.concreteGetAllStrategy import GetAllTransactionsStrategy
 
 class MainControl:
     #data_manager = DataManager()
@@ -89,13 +89,3 @@ class MainControl:
             if user.password == password:
                 return user
         return False
-
-    @classmethod
-    def get_total_amount(cls):
-        # tollPayments = cls.get_all_transactions()
-        get_all_strategy = GetAllTransactionsStrategy()
-        tollPayments = cls.get_all(get_all_strategy)
-        total = 0
-        for tollPayment in tollPayments:
-            total += float(tollPayment.amount)
-        return total
