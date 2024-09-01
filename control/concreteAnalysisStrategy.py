@@ -33,9 +33,7 @@ class PaymentMethodAnalysisStrategy(AnalysisStrategy):
 
 class GetTotalAmountStrategy(AnalysisStrategy):
     def analyze(self, toll_payments):
-        get_all_strategy = GetAllTransactionsStrategy()
-        tollPayments = MainControl.get_all(get_all_strategy)
         total = 0
-        for tollPayment in tollPayments:
+        for tollPayment in toll_payments:
             total += float(tollPayment.amount)
         return total
