@@ -25,7 +25,6 @@ Veiculos, operadores, placas, legalidade de veiculos, pista de pedagio, localiza
 - Linguagem: Python
 - Bibliotecas: 
     - tkinter, para interface grafica
-    - json, para comunicação com a persistencia de dados
     - mathplotlib
     - numpy
 
