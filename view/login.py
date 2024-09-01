@@ -60,5 +60,4 @@ class LoginView:
         else:
             print('Invalid username or password')
     def close(self):
-        MainControl.close_data_manager()
         self.root.quit()

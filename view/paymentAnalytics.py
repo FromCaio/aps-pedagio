@@ -5,6 +5,7 @@ from collections import Counter
 import matplotlib.pyplot as plt
 from control.maincontrol import MainControl
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from control.concreteAnalysisStrategy import OperatorAnalysisStrategy, PeakTimesAnalysisStrategy, PaymentMethodAnalysisStrategy
 
 class PaymentAnalytics:
     def __init__(self, root):
@@ -58,7 +59,11 @@ class PaymentAnalytics:
         self.method_graph(frame_payment_methods)
     
     def method_graph(self, frame):
-        methods, counts = MainControl.get_payments_by_method()  
+        # methods, counts = MainControl.get_payments_by_method()  
+        pmas = PaymentMethodAnalysisStrategy()
+        methods, counts = MainControl.analyze_transactions(pmas)
+
+        MainControl.analyze_transactions
         plt.style.use('_mpl-gallery')
         # Criar gráfico de pizza
         fig, ax = plt.subplots(figsize=(5, 5))  # Ajusta o tamanho do gráfico
@@ -84,7 +89,9 @@ class PaymentAnalytics:
         canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
     def operator_graph(self, frame):
-        operators, counts = MainControl.get_transactions_by_operators()
+        # operators, counts = MainControl.get_transactions_by_operators()
+        oas = OperatorAnalysisStrategy()
+        operators, counts = MainControl.analyze_transactions(oas)
         plt.style.use('_mpl-gallery')
         
         x = np.arange(len(operators))  # Eixo x
@@ -109,13 +116,15 @@ class PaymentAnalytics:
 
     def hour_graph(self, frame):
         # Obtendo a o dicionario com a contagem de transações por hora
-        hour_counts = MainControl.get_peak_times()
+        # hour_counts = MainControl.get_peak_times()
+        ptas = PeakTimesAnalysisStrategy()
+        hour_counts = MainControl.analyze_transactions(ptas)
         # Preparando os dados para o gráfico
         x = np.array(sorted(hour_counts.keys()))  # Horas ordenadas
         y = np.array([hour_counts[hour] for hour in x])  # Frequência das horas
 
         # Criando o gráfico de linha
-        fig, ax = plt.subplots(figsize=(5, 5))
+        fig, ax = plt.subplots(figsize=(6, 5))
         ax.plot(x, y, marker='o', linestyle='-', color='blue')
         # Adicionando linhas verticais nos pontos
         ax.vlines(x, ymin=0, ymax=y, color='gray', linestyle='dashed', alpha=0.5)

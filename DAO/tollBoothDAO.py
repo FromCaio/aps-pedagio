@@ -17,11 +17,13 @@ class TollBoothDAO(DAO):
 
     def insert(self, tollBooth):
         self.tollBooths.append(tollBooth)
+        self.close()
     
     def delete(self, tollBooth):
         for toll_booth in self.tollBooths:
             if toll_booth.boothid == tollBooth.boothid:
                 self.tollBooths.remove(toll_booth)
+        self.close()
     
     def find(self, id):
         for toll_booth in self.tollBooths:

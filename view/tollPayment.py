@@ -7,6 +7,9 @@ from tkinter import Label
 from tkinter import Entry
 from tkinter import Button
 from tkinter import ttk
+from control.concreteAddStrategy import AddTransactionStrategy
+from control.concreteRemoveStrategy import RemoveTollPaymentStrategy
+from control.concreteGetAllStrategy import GetAllTransactionsStrategy
 
 class TollPaymentView:
     def __init__(self, root, email):
@@ -93,14 +96,18 @@ class TollPaymentView:
 
         if vehicle and operator and tollbooth:
             new_transaction = TollPayment(transactionid, vehicle, tollbooth, operator, amount, payment_method, datetime)
-            MainControl.add_transaction(new_transaction)
+            # MainControl.add_transaction(new_transaction)
+            add_strategy = AddTransactionStrategy()
+            MainControl.add_entity(add_strategy, new_transaction)
             self.popup.destroy()
         else:
             error_label = tk.Label(self.popup, text="Invalid vehicle, operator or toll booth. Please check your inputs.", fg='red', bg='light blue')
             error_label.pack()
     
     def list_transactions(self):
-        transactions = MainControl.get_all_transactions()  # Obtendo as transações
+        # transactions = MainControl.get_all_transactions()  # Obtendo as transações
+        get_all_strategy = GetAllTransactionsStrategy()
+        transactions = MainControl.get_all_entities(get_all_strategy)
         self.root.grid_rowconfigure(0, minsize=100)
         self.root.grid_columnconfigure(0, minsize=100)
         table_label = Label(self.root)
@@ -158,7 +165,9 @@ class TollPaymentView:
         # get the transaction from the selected item
         transaction = MainControl.find_transaction_by_id(self.tree.item(selected_item)['values'][0])
         # remove the transaction
-        MainControl.remove_tollPayment(transaction)
+        # MainControl.remove_tollPayment(transaction)
+        remove_strategy = RemoveTollPaymentStrategy()
+        MainControl.remove_entity(remove_strategy, transaction)
         # remove the selected item from the tree
         self.tree.delete(selected_item)
 
@@ -168,11 +177,15 @@ class TollPaymentView:
         # remove the transactions
         for item in selected_items:
             transaction = MainControl.find_transaction_by_id(self.tree.item(item)['values'][0])
-            MainControl.remove_tollPayment(transaction)
+            # MainControl.remove_tollPayment(transaction)
+            remove_strategy = RemoveTollPaymentStrategy()
+            MainControl.remove_entity(remove_strategy, transaction)
             self.tree.delete(item) 
 
     def refresh_table(self):
-        transactions = MainControl.get_all_transactions()
+        # transactions = MainControl.get_all_transactions()
+        get_all_strategy = GetAllTransactionsStrategy()
+        transactions = MainControl.get_all_entities(get_all_strategy)
         for item in self.tree.get_children():
             self.tree.delete(item)
         for i, transaction in enumerate(transactions):

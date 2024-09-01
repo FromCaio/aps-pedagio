@@ -17,11 +17,13 @@ class TollOperatorDAO(DAO):
 
     def insert(self, tollOperator):
         self.tollOperators.append(tollOperator)
+        self.close()
     
     def delete(self, tollOperator):
         for toll_op in self.tollOperators:
             if toll_op.email == tollOperator.email:
                 self.tollOperators.remove(toll_op)
+        self.close()
     
     def find(self, email):
         for toll_op in self.tollOperators:

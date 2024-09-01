@@ -17,11 +17,13 @@ class TollPaymentDAO(DAO):
     
     def insert(self, tollPayment):
         self.tollPayments.append(tollPayment)
+        self.close()
     
     def delete(self, tollPayment):
         for payment in self.tollPayments:
             if payment.transactionid == tollPayment.transactionid:
                 self.tollPayments.remove(payment)
+        self.close()
     
     def find(self, transactionid):
         for tollPayment in self.tollPayments:

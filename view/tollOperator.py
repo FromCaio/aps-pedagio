@@ -11,6 +11,9 @@ from model.tollOperator import TollOperator
 from control.maincontrol import MainControl
 from view.vehicle import VehicleView
 from view.tollPayment import TollPaymentView
+from control.concreteAddStrategy import AddTollOperatorStrategy
+from control.concreteRemoveStrategy import RemoveTollOperatorStrategy
+from control.concreteGetAllStrategy import GetAllTollOperatorStrategy
 
 
 class TollOperatorView:
@@ -87,11 +90,15 @@ class TollOperatorView:
         email = self.email_entry.get()
         password = self.password_entry.get()
         new_operator = TollOperator(operatorid, name, email, password)
-        MainControl.add_tollOperator(new_operator)
+        # MainControl.add_tollOperator(new_operator)
+        add_strategy = AddTollOperatorStrategy()
+        MainControl.add_entity(add_strategy, new_operator)
         self.popup.destroy()
         
     def list_tollOperator(self):
-        tollOperators = MainControl.get_all_tollOperators()
+        # tollOperators = MainControl.get_all_tollOperators()
+        get_all_strategy = GetAllTollOperatorStrategy()
+        tollOperators = MainControl.get_all(get_all_strategy)
         self.root.grid_rowconfigure(0, minsize=100)
         self.root.grid_columnconfigure(0, minsize=100)
         table_label = Label(self.root)
@@ -131,7 +138,9 @@ class TollOperatorView:
         self.tree = tree
     
     def refresh_table(self):
-        tollOperators = MainControl.get_all_tollOperators()
+        # tollOperators = MainControl.get_all_tollOperators()
+        get_all_strategy = GetAllTollOperatorStrategy()
+        tollOperators = MainControl.get_all(get_all_strategy)
         for item in self.tree.get_children():
             self.tree.delete(item)
         for i, toll_op in enumerate(tollOperators):
@@ -159,7 +168,9 @@ class TollOperatorView:
         tollOperator = MainControl.find_tollOperator(self.tree.item(selected_item)['values'][2])
 
         # remove the toll operator
-        MainControl.remove_tollOperator(tollOperator)
+        # MainControl.remove_tollOperator(tollOperator)
+        remove_strategy = RemoveTollOperatorStrategy()
+        MainControl.remove_entity(remove_strategy, tollOperator)
         # remove the selected item from the tree
         self.tree.delete(selected_item)
 
@@ -169,7 +180,9 @@ class TollOperatorView:
         # remove the toll operators
         for item in selected_items:
             tollOperator = MainControl.find_tollOperator(self.tree.item(item)['values'][2])
-            MainControl.remove_tollOperator(tollOperator)
+            # MainControl.remove_tollOperator(tollOperator)
+            remove_strategy = RemoveTollOperatorStrategy()
+            MainControl.remove_entity(remove_strategy, tollOperator)
             self.tree.delete(item)
     
     # the clear method will clear the root window
@@ -181,7 +194,6 @@ class TollOperatorView:
     def donothing(self):
         pass
     def close(self):
-        MainControl.close_data_manager()
         self.root.quit()
 
     def list_vehicle(self):

@@ -13,6 +13,9 @@ from view.tollBooth import TollBoothView
 from view.paymentAnalytics import PaymentAnalytics
 from model.admin import Admin
 from control.maincontrol import MainControl
+from control.concreteAddStrategy import AddAdminStrategy
+from control.concreteRemoveStrategy import RemoveAdminStrategy
+from control.concreteGetAllStrategy import GetAllAdminStrategy
 
 
 class AdminView:
@@ -121,7 +124,9 @@ class AdminView:
         email = self.email_entry.get()
         permission = int(self.permission_entry.get())
         new_admin = Admin(id, name, password, email, permission)
-        MainControl.add_admin(new_admin)
+        # MainControl.add_admin(new_admin)
+        add_admin_strategy = AddAdminStrategy()
+        MainControl.add_entity(add_admin_strategy, new_admin)
         self.popup.destroy()
 
     def clear(self):
@@ -135,7 +140,10 @@ class AdminView:
             return
         self.clear()
         # get all the admins
-        admins = MainControl.get_all_admins()
+        # admins = MainControl.get_all_admins()
+        get_all_admins_strategy = GetAllAdminStrategy()
+        admins = MainControl.get_all(get_all_admins_strategy)
+        print(admins)
         # making every grid have a minimum size
         self.root.grid_rowconfigure(0, minsize=100)
         self.root.grid_columnconfigure(0, minsize=100)
@@ -192,9 +200,13 @@ class AdminView:
         # get the selected item
         selected_item = self.tree.selection()[0]
         # get the admin from the selected item
+        print(selected_item)
         admin = MainControl.find_admin(self.tree.item(selected_item)['values'][1])
         # remove the admin
-        MainControl.remove_admin(admin)
+        # MainControl.remove_admin(admin)
+        remove_admin_strategy = RemoveAdminStrategy()
+        print(admin)
+        MainControl.remove_entity(remove_admin_strategy, admin)
         # remove the selected item from the tree
         self.tree.delete(selected_item)
     def remove_many(self):
@@ -203,7 +215,9 @@ class AdminView:
         # remove the admins
         for item in selected_items:
             admin = MainControl.find_admin(self.tree.item(item)['values'][1])
-            MainControl.remove_admin(admin)
+            # MainControl.remove_admin(admin)
+            remove_admin_strategy = RemoveAdminStrategy()
+            MainControl.remove_entity(remove_admin_strategy, admin)
             self.tree.delete(item)
     def find_admin(self):
         # find admin by name and add it to the tree
@@ -260,7 +274,9 @@ class AdminView:
         self.tollBooth.list_tollBooth()
     
     def refresh_table(self):
-        admins = MainControl.get_all_admins()
+        # admins = MainControl.get_all_admins()
+        get_all_admins_strategy = GetAllAdminStrategy()
+        admins = MainControl.get_all(get_all_admins_strategy)
         for item in self.tree.get_children():
             self.tree.delete(item)
         for i, admin in enumerate(admins):
@@ -274,5 +290,4 @@ class AdminView:
     def donothing(self):
         pass
     def close(self):
-        MainControl.close_data_manager()
         self.root.quit()

@@ -5,6 +5,9 @@ from tkinter import Label
 from tkinter import Entry
 from tkinter import Button
 from tkinter import ttk
+from control.concreteAddStrategy import AddTollBoothStrategy
+from control.concreteRemoveStrategy import RemoveTollBoothStrategy
+from control.concreteGetAllStrategy import GetAllTollBoothStrategy
 
 class TollBoothView:
     def __init__(self, root):
@@ -46,11 +49,15 @@ class TollBoothView:
         highway = self.highway_entry.get()
         status = self.status_entry.get()
         new_tollbooth = TollBooth(boothid, highway, status)
-        MainControl.add_tollBooth(new_tollbooth)
+        # MainControl.add_tollBooth(new_tollbooth)
+        add_strategy = AddTollBoothStrategy()
+        MainControl.add_entity(add_strategy, new_tollbooth)
         self.popup.destroy()
 
     def list_tollBooth(self):
-        tollBooths = MainControl.get_all_tollBooths()
+        # tollBooths = MainControl.get_all_tollBooths()
+        get_all_strategy = GetAllTollBoothStrategy()
+        tollBooths = MainControl.get_all(get_all_strategy)
         self.root.grid_rowconfigure(0, minsize=100)
         self.root.grid_columnconfigure(0, minsize=100)
         table_label = Label(self.root)
@@ -94,7 +101,9 @@ class TollBoothView:
         tollBooth = MainControl.find_tollBooth(self.tree.item(selected_item)['values'][0])
         print(tollBooth)
         # remove the toll both
-        MainControl.remove_tollBooth(tollBooth)
+        # MainControl.remove_tollBooth(tollBooth)
+        remove_strategy = RemoveTollBoothStrategy()
+        MainControl.remove_entity(remove_strategy, tollBooth)
         # remove the selected item from the tree
         self.tree.delete(selected_item)
 
@@ -104,7 +113,9 @@ class TollBoothView:
         # remove the toll boths
         for item in selected_items:
             tollBooth = MainControl.find_tollBooth(self.tree.item(item)['values'][0])
-            MainControl.remove_tollBooth(tollBooth)
+            # MainControl.remove_tollBooth(tollBooth)
+            remove_strategy = RemoveTollBoothStrategy()
+            MainControl.remove_entity(remove_strategy, tollBooth)
             self.tree.delete(item)
     
     def find_booth_by_highway(self):
@@ -122,7 +133,9 @@ class TollBoothView:
         for i, booth in enumerate(tollBooths):
             self.tree.insert(parent="", index=tk.END, iid=i, text="", values=(booth.boothid, booth.highway, booth.status))
     def refresh_table(self):
-        tollBooths = MainControl.get_all_tollBooths()
+        # tollBooths = MainControl.get_all_tollBooths()
+        get_all_strategy = GetAllTollBoothStrategy()
+        tollBooths = MainControl.get_all(get_all_strategy)
         for item in self.tree.get_children():
             self.tree.delete(item)
         for i, booth in enumerate(tollBooths):

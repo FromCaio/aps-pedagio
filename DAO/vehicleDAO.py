@@ -17,11 +17,13 @@ class VehicleDAO(DAO):
     
     def insert(self, vehicle):
         self.vehicles.append(vehicle)
+        self.close()
     
     def delete(self, vehicle):
         for veh in self.vehicles:
             if veh.plate == (str)(vehicle.plate):
                 self.vehicles.remove(veh)
+        self.close()
     
     def find(self, plate):
         for vehicle in self.vehicles:

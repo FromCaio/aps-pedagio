@@ -15,12 +15,17 @@ class AdminDAO(DAO):
             self.admins = []
 
     def insert(self, admin):
+        print(self.admins)
+        print(admin)
         self.admins.append(admin)
+        self.close()
     
     def delete(self, admin):
+        print(admin)
         for adm in self.admins:
             if adm.email == admin.email:
                 self.admins.remove(adm)
+        self.close()
     
     def find(self, email):
         for admin in self.admins:

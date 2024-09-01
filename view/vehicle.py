@@ -5,6 +5,9 @@ from tkinter import Label
 from tkinter import Entry
 from tkinter import Button
 from tkinter import ttk
+from control.concreteAddStrategy import AddVehicleStrategy
+from control.concreteRemoveStrategy import RemoveVehicleStrategy
+from control.concreteGetAllStrategy import GetAllVehicleStrategy
 
 class VehicleView:
     def __init__(self, root):
@@ -52,10 +55,14 @@ class VehicleView:
         color = self.color_entry.get()
         status = self.status_entry.get()
         new_vehicle = Vehicle(plate, model, color, status)
-        MainControl.add_vehicle(new_vehicle)
+        # MainControl.add_vehicle(new_vehicle)
+        add_strategy = AddVehicleStrategy()
+        MainControl.add_entity(add_strategy, new_vehicle)
         self.popup.destroy()
     def list_vehicle(self):
-        vehicles = MainControl.get_all_vehicles()
+        # vehicles = MainControl.get_all_vehicles()
+        get_all_strategy = GetAllVehicleStrategy()
+        vehicles = MainControl.get_all(get_all_strategy)
         self.root.grid_rowconfigure(0, minsize=100)
         self.root.grid_columnconfigure(0, minsize=100)
         table_label = Label(self.root)
@@ -100,7 +107,9 @@ class VehicleView:
         # get the vehicle from the selected item
         vehicle = MainControl.find_vehicle(self.tree.item(selected_item)['values'][0])
         # remove the vehicle
-        MainControl.remove_vehicle(vehicle)
+        # MainControl.remove_vehicle(vehicle)
+        remove_strategy = RemoveVehicleStrategy()
+        MainControl.remove_entity(remove_strategy, vehicle)
         # remove the selected item from the tree
         self.tree.delete(selected_item)
 
@@ -110,7 +119,9 @@ class VehicleView:
         # remove the vehicles
         for item in selected_items:
             vehicle = MainControl.find_vehicle(self.tree.item(item)['values'][0])
-            MainControl.remove_vehicle(vehicle)
+            # MainControl.remove_vehicle(vehicle)
+            remove_strategy = RemoveVehicleStrategy()
+            MainControl.remove_entity(remove_strategy, vehicle)
             self.tree.delete(item)
     
     def find_vehicle_by_model(self):
@@ -128,7 +139,9 @@ class VehicleView:
         for i, veh in enumerate(vehicles):
             self.tree.insert(parent="", index=tk.END, iid=i, text="", values=(veh.plate, veh.model, veh.color, veh.status))
     def refresh_table(self):
-        vehicles = MainControl.get_all_vehicles()
+        # vehicles = MainControl.get_all_vehicles()
+        get_all_strategy = GetAllVehicleStrategy()
+        vehicles = MainControl.get_all(get_all_strategy)
         for item in self.tree.get_children():
             self.tree.delete(item)
         for i, vehicle in enumerate(vehicles):
