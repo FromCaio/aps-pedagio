@@ -46,5 +46,6 @@ Para executar o programa, o usuário deve rodar o arquivo `main.py`. Certifique-
 
 ```bash
 python main.py
+```
 
 # BUGS CONHECIDOS
