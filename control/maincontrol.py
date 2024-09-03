@@ -10,7 +10,6 @@ from control.getAllStrategy import GetAllStrategy
 from control.concreteGetAllStrategy import GetAllTransactionsStrategy
 
 class MainControl:
-    #data_manager = DataManager()
     adminDAO = AdminDAO()
     vehicleDAO = VehicleDAO()
     tollBoothDAO = TollBoothDAO()
@@ -38,7 +37,6 @@ class MainControl:
     @classmethod
     def get_all(cls, strategy: GetAllStrategy):
         return strategy.get_all()
-    
 
     # metodos find
     @classmethod

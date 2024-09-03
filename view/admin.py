@@ -143,7 +143,6 @@ class AdminView:
         # admins = MainControl.get_all_admins()
         get_all_admins_strategy = GetAllAdminStrategy()
         admins = MainControl.get_all(get_all_admins_strategy)
-        print(admins)
         # making every grid have a minimum size
         self.root.grid_rowconfigure(0, minsize=100)
         self.root.grid_columnconfigure(0, minsize=100)

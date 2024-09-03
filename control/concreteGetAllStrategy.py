@@ -8,9 +8,7 @@ from DAO.tollPaymentDAO import TollPaymentDAO
 class GetAllAdminStrategy(GetAllStrategy):
     def get_all(self):
         list = AdminDAO().admins
-        print(list)
         return list
-
 
 class GetAllVehicleStrategy(GetAllStrategy):
     def get_all(self):
